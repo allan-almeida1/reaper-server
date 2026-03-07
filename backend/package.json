@@ -1,0 +1,27 @@
+{
+  "name": "reaper-server",
+  "version": "1.0.0",
+  "description": "This package creates a websocket for interacting with Reaper",
+  "license": "ISC",
+  "author": "Allan Almeida",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.5",
+    "@types/ws": "^8.18.1",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
