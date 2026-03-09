@@ -8,6 +8,7 @@ import { RiPlayListLine } from "react-icons/ri";
 import SearchInput from './components/SearchInput';
 import Playlist from './components/Playlist';
 import Settings from './components/Settings';
+import Transport from './components/Transport';
 
 function App() {
 
@@ -69,7 +70,11 @@ function App() {
         </div>
 
         <div className='bg-base-200 p-6 rounded-2xl w-full'>
-          Teste
+          <Transport
+            getState={getState}
+            send={send}
+            state={state}
+          />
         </div>
 
       </div>

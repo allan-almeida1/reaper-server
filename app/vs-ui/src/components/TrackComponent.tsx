@@ -115,6 +115,7 @@ export default function TrackComponent({ track, send, getState, key }: TrackComp
 				<Fader
 					sliderValue={dbToSlider(level)}
 					onChange={handleSliderChange}
+					getState={getState}
 				/>
 				<button
 					className={`${track.mute ? 'bg-red-500' : 'bg-[#462627] text-[#FF6467]'} rounded-sm px-4 py-1 cursor-pointer`}
@@ -135,4 +136,4 @@ export default function TrackComponent({ track, send, getState, key }: TrackComp
 	)
 }
 
-export { dbToSlider };
+export { dbToSlider, dbToNormalized };

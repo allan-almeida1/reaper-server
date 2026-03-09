@@ -19,9 +19,15 @@ export function createWsServer(
         state.transport = "play";
         reaper.play();
       }
+
       if (cmd.type === "stop") {
         state.transport = "stop";
         reaper.stop();
+      }
+
+      if (cmd.type === "pause") {
+        state.transport = "pause";
+        reaper.pause();
       }
 
       if (cmd.type === "mute") {

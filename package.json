@@ -4,7 +4,15 @@
 	"private": true,
 	"workspaces": [
 		"backend",
-		"frontend",
+		"app/vs-ui",
 		"shared"
-	]
+	],
+	"scripts": {
+		"dev": "concurrently -n \"BACK,UI\" -c \"cyan,magenta\" \"npm run dev -w backend\" \"npm run dev -w vs-ui\"",
+		"build": "npm run build -w backend && npm run build -w vs-ui",
+		"start": "npm run start -w backend"
+	},
+	"dependencies": {
+		"concurrently": "^8.2.0"
+	}
 }

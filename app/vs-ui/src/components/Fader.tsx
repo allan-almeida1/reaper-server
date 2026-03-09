@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { dbToSlider } from './TrackComponent';
+import { dbToNormalized, dbToSlider } from './TrackComponent';
 
 interface FaderProps {
 	sliderValue: number;
 	onChange: (value: number) => void;
+	getState?: () => void;
 }
 
-const Fader = ({ sliderValue, onChange }: FaderProps) => {
+const Fader = ({ sliderValue, onChange, getState }: FaderProps) => {
 	const [hydrated, setHydrated] = useState(false);
 
 	useEffect(() => {
@@ -29,6 +30,8 @@ const Fader = ({ sliderValue, onChange }: FaderProps) => {
 		onChange(dbToSlider(0.4)); // Define o valor do slider para 0 dB (corrigindo aprox)
 	}
 
+	const DB_TICKS = [12, 6, 0, -6, -12, -18, -24, -30, -60, -Infinity];
+
 	if (!hydrated) {
 		// this returns null on first render, so the client and server match
 		return null
@@ -37,14 +40,33 @@ const Fader = ({ sliderValue, onChange }: FaderProps) => {
 		<div className="h-full flex flex-col items-center bg-blue-300">
 			<div className='relative h-full bg-red-600'>
 				{/* 1. Ticks (Marcações de dB) */}
-				<div className="absolute inset-y-0 right-0 w-2 opacity-20 border-y border-gray-400"
-					style={{
-						backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 19px, #fff 20px)',
-						backgroundSize: '100% 100%'
-					}}
-				/>
+				<div className="absolute inset-y-0 right-0 w-3 pointer-events-none">
+					{DB_TICKS.map((db) => {
+						// Converte o valor de dB para a posição vertical (0 a 100%)
+						// Como o fader é vertical, o topo é 100% (max dB) e a base é 0%
+						const position = (1 - dbToNormalized(db)) * 100;
+
+						return (
+							<div
+								key={db}
+								className="absolute right-0 flex items-center w-full"
+								style={{ top: `${position}%` }}
+							>
+								{/* A linha da marcação */}
+								<div className={`h-[1px] w-full ${db === 0 ? 'bg-white opacity-80 w-4' : 'bg-gray-400 opacity-30'}`} />
+
+								{/* O texto do dB (opcional, só para os principais) */}
+								{[12, 0, -12, -24, -60].includes(db) && (
+									<span className="absolute -right-6 text-[10px] text-gray-500 font-mono">
+										{db <= 0 ? db : `+${db}`}
+									</span>
+								)}
+							</div>
+						);
+					})}
+				</div>
 				{/* 2. Trilho (Slot central) */}
-				<div className="absolute w-[4px] h-full bg-black rounded-full shadow-[inset_1px_1px_2px_rgba(255,255,255,0.1)] border border-[#333]" />
+				<div className="absolute w-[4px] h-full bg-black shadow-[inset_1px_1px_2px_rgba(255,255,255,0.1)] border border-[#444]" />
 
 				{/* 3. Input Range (Invisível, mas funcional) */}
 				<input
@@ -55,6 +77,7 @@ const Fader = ({ sliderValue, onChange }: FaderProps) => {
 					onChange={(e) => onChange(parseFloat(e.target.value))}
 					onDoubleClick={handleDoubleClick}
 					onTouchStart={handleTouchStart}
+					onMouseUp={getState ? () => setTimeout(getState, 100) : undefined}
 					className="fader-input absolute w-64 h-12 -left-31.5 top-24 appearance-none cursor-pointer z-10"
 					style={{ transform: 'rotate(-90deg)' }}
 				/>

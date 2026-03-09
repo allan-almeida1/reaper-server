@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts --env-file .env",
+    "dev": "tsx watch src/server.ts -- --host --env-file .env",
     "build": "tsc",
     "start": "node dist/server.js"
   },
