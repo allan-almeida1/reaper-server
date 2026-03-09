@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import type { Project } from '@reaper/shared'
+import { useReaper } from '../contexts/ReaperContext'
 
 const genres = [
 	"REGGAE",
@@ -26,12 +26,10 @@ const genreColorMap = {
 	GALOPE: "#dfd7ff"
 }
 
-interface PlaylistProps {
-	projects?: Project[];
-}
-
-const Playlist = ({ projects }: PlaylistProps) => {
+const Playlist = () => {
 	const [hydrated, setHydrated] = useState(false);
+
+	const { projects, send } = useReaper();
 
 	const getProjectColor = (name: string) => {
 		// Get the first two letters of the project name and convert to number
@@ -62,7 +60,11 @@ const Playlist = ({ projects }: PlaylistProps) => {
 							<td style={
 								{ backgroundColor: getProjectColor(project.name) }
 							}
-								className='text-base-100 cursor-pointer border-y-2'>{project.name}</td>
+								className='text-base-100 cursor-pointer border-y-2'
+								onClick={() => {
+									send({ type: "openProject", payload: project.path })
+								}}
+							>{project.name}</td>
 						</tr>
 					))}
 				</tbody>

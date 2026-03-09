@@ -37,6 +37,26 @@ export function createWsServer(
         reaper.goToMarker(marker.id);
       }
 
+      if (cmd.type === "openProject") {
+        const projectPath = cmd.payload;
+        reaper.openProject(projectPath).then((success) => {
+          if (!success) {
+            ws.send(
+              JSON.stringify({
+                type: "error",
+                data: "Failed to open project. Check server logs for details.",
+              }),
+            );
+          } else {
+            setTimeout(() => {
+              reaper.getState().then((newState) => {
+                ws.send(JSON.stringify({ type: "state", data: newState }));
+              });
+            }, 3000);
+          }
+        });
+      }
+
       if (cmd.type === "mute") {
         const track = state.tracks.find((t) => t.id === cmd.payload) as Track;
         track.mute = !track.mute;

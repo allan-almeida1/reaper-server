@@ -1,13 +1,12 @@
 
-import type { Track, Command } from "@reaper/shared";
+import type { Track } from "@reaper/shared";
 import { useCallback, useState } from "react";
 import { throttle } from "lodash";
 import Fader from "./Fader";
+import { useReaper } from "../contexts/ReaperContext";
 
 interface TrackComponentProps {
 	track: Track;
-	send: (cmd: Command) => void;
-	getState?: () => void;
 	key?: React.Key;
 }
 
@@ -57,9 +56,11 @@ const dbToNormalized = (db: number): number => {
 	return Math.min(1, val);
 };
 
-export default function TrackComponent({ track, send, getState, key }: TrackComponentProps) {
+export default function TrackComponent({ track, key }: TrackComponentProps) {
 
 	const [level, setLevel] = useState(track.level);
+
+	const { send, getState } = useReaper();
 
 	const delayedGetState = () => {
 		setTimeout(() => {
@@ -102,9 +103,7 @@ export default function TrackComponent({ track, send, getState, key }: TrackComp
 							type: "solo",
 							payload: track.id
 						});
-						if (getState) {
-							delayedGetState();
-						}
+						delayedGetState();
 					}}
 				>S</button>
 				<div className="">

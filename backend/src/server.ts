@@ -16,47 +16,68 @@ const server = app.listen(3000, () => {
 let projects: Project[] = [
   {
     name: "01 - OUTRA VIDA ZOIO TEU ANDEI SO ZOIO DE LULA",
-    path: "/path/to/project1",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
   {
     name: "01 - RAIZ DE TODO BEM TOPO DO MUNDO ENVOLVIDAO",
-    path: "/path/to/project2",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "02 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project2" },
+  {
+    name: "02 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
   {
     name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
   {
     name: "03 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
-    path: "/path/to/project3",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
-  { name: "03 - O QUE MEUS OLHOS VIRAM", path: "/path/to/project4" },
+  {
+    name: "03 - O QUE MEUS OLHOS VIRAM",
+    path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
+  },
 ];
 
 const wss = new WebSocketServer({ server });

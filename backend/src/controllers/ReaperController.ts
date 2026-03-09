@@ -3,6 +3,10 @@ import type { State } from "@reaper/shared";
 import { Client, Server } from "node-osc";
 import readline from "readline";
 import { Readable } from "stream";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 const sendOscCommand = (command: string, value?: number) => {
   const client = new Client(
@@ -141,7 +145,14 @@ class ReaperController implements ReaperControllerInterface {
   }
 
   async openProject(path: string): Promise<boolean> {
-    return true;
+    try {
+      const cmd = `xdg-open "${path}"`;
+      await execAsync(cmd);
+      return true;
+    } catch (error) {
+      console.error("Error opening project:", error);
+      return false;
+    }
   }
 
   async getState(): Promise<State> {

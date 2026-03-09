@@ -3,20 +3,18 @@ import { FaPlay, FaStop } from "react-icons/fa";
 import { FaPause } from "react-icons/fa6";
 import { VscTriangleDown } from "react-icons/vsc";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
-import type { Command, Marker, State } from "@reaper/shared";
+import type { Marker } from "@reaper/shared";
+import { useReaper } from '../contexts/ReaperContext';
 
-interface TransportProps {
-	send: (cmd: Command) => void;
-	getState?: () => void;
-	state: State;
-}
 
-const Transport = ({ getState, send, state }: TransportProps) => {
+const Transport = () => {
 	const [hydrated, setHydrated] = useState(false);
 	const [activeMarker, setActiveMarker] = useState<number>(1);
 	const [clickedMarker, setClickedMarker] = useState<number | null>(null);
 	const [isMarkerClicked, setIsMarkerClicked] = useState(false);
 	const [showingMarkers, setShowingMarkers] = useState(false);
+
+	const { state, getState, send } = useReaper();
 
 	useEffect(() => {
 		// this forces a rerender
@@ -25,9 +23,7 @@ const Transport = ({ getState, send, state }: TransportProps) => {
 
 	const delayedGetState = () => {
 		setTimeout(() => {
-			if (getState) {
-				getState();
-			}
+			getState();
 		}, 100);
 	}
 
