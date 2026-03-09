@@ -47,7 +47,10 @@ async function parseReaperState(tsv: string): Promise<State> {
   const state: State = {
     tracks: [],
     markers: [],
-    transport: "stop",
+    transport: {
+      state: "stop",
+      position: 0,
+    },
   };
 
   rl.on("line", (line) => {
@@ -55,12 +58,14 @@ async function parseReaperState(tsv: string): Promise<State> {
 
     if (columns[0] === "TRANSPORT") {
       const transportState = columns[1];
+      const position = parseFloat(columns[2]);
+      state.transport.position = position;
       if (transportState === "0") {
-        state.transport = "stop";
+        state.transport.state = "stop";
       } else if (transportState === "1") {
-        state.transport = "play";
+        state.transport.state = "play";
       } else if (transportState === "2") {
-        state.transport = "pause";
+        state.transport.state = "pause";
       }
     } else if (columns[0] === "TRACK" && columns[1] !== "0") {
       const trackId = parseInt(columns[1]);
@@ -77,11 +82,13 @@ async function parseReaperState(tsv: string): Promise<State> {
         level: gainToDb(trackLevel),
       });
     } else if (columns[0] === "MARKER") {
-      const markerId = parseInt(columns[1]);
-      const markerName = columns[2];
+      const markerId = parseInt(columns[2]);
+      const markerName = columns[1];
+      const position = parseFloat(columns[3]);
       state.markers.push({
         id: markerId,
         name: markerName,
+        position,
       });
     }
   });
@@ -120,6 +127,11 @@ class ReaperController implements ReaperControllerInterface {
   pause(): void {
     const pauseCmd = "/action/1008";
     sendOscCommand(pauseCmd);
+  }
+
+  goToMarker(markerId: number): void {
+    const cmd = "/marker";
+    sendOscCommand(cmd, markerId);
   }
 
   async setAudioDevice(deviceName: string): Promise<boolean> {

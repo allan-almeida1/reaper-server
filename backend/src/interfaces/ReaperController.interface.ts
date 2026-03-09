@@ -7,6 +7,7 @@ export interface ReaperControllerInterface {
   play(): void;
   stop(): void;
   pause(): void;
+  goToMarker(markerId: number): void;
   setAudioDevice(deviceName: string): Promise<boolean>;
   getState(): Promise<State>;
 }

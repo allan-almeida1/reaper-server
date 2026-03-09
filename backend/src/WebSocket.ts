@@ -16,18 +16,25 @@ export function createWsServer(
       const cmd = JSON.parse(message);
 
       if (cmd.type === "play") {
-        state.transport = "play";
+        state.transport.state = "play";
         reaper.play();
       }
 
       if (cmd.type === "stop") {
-        state.transport = "stop";
+        state.transport.state = "stop";
         reaper.stop();
       }
 
       if (cmd.type === "pause") {
-        state.transport = "pause";
+        state.transport.state = "pause";
         reaper.pause();
+      }
+
+      if (cmd.type === "goToMarker") {
+        const markerId = cmd.payload;
+        const marker = state.markers.find((m) => m.id === markerId);
+        if (!marker) return;
+        reaper.goToMarker(marker.id);
       }
 
       if (cmd.type === "mute") {

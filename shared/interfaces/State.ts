@@ -4,5 +4,8 @@ import type { Track } from "./Track";
 export interface State {
   tracks: Track[];
   markers: Marker[];
-  transport: "stop" | "play" | "pause";
+  transport: {
+    state: "play" | "pause" | "stop";
+    position: number;
+  };
 }

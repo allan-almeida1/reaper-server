@@ -1,7 +1,7 @@
 
 import type { Track, Command } from "@reaper/shared";
-import { useCallback, useEffect, useState } from "react";
-import { set, throttle } from "lodash";
+import { useCallback, useState } from "react";
+import { throttle } from "lodash";
 import Fader from "./Fader";
 
 interface TrackComponentProps {

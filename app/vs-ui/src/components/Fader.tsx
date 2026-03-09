@@ -53,7 +53,7 @@ const Fader = ({ sliderValue, onChange, getState }: FaderProps) => {
 								style={{ top: `${position}%` }}
 							>
 								{/* A linha da marcação */}
-								<div className={`h-[1px] w-full ${db === 0 ? 'bg-white opacity-80 w-4' : 'bg-gray-400 opacity-30'}`} />
+								<div className={`h-px w-full ${db === 0 ? 'bg-white opacity-80 w-4' : 'bg-gray-400 opacity-30'}`} />
 
 								{/* O texto do dB (opcional, só para os principais) */}
 								{[12, 0, -12, -24, -60].includes(db) && (
@@ -66,7 +66,7 @@ const Fader = ({ sliderValue, onChange, getState }: FaderProps) => {
 					})}
 				</div>
 				{/* 2. Trilho (Slot central) */}
-				<div className="absolute w-[4px] h-full bg-black shadow-[inset_1px_1px_2px_rgba(255,255,255,0.1)] border border-[#444]" />
+				<div className="absolute w-1 h-full bg-black shadow-[inset_1px_1px_2px_rgba(255,255,255,0.1)] border border-[#444]" />
 
 				{/* 3. Input Range (Invisível, mas funcional) */}
 				<input
