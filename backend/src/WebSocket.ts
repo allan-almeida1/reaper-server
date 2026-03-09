@@ -39,22 +39,7 @@ export function createWsServer(
 
       if (cmd.type === "openProject") {
         const projectPath = cmd.payload;
-        reaper.openProject(projectPath).then((success) => {
-          if (!success) {
-            ws.send(
-              JSON.stringify({
-                type: "error",
-                data: "Failed to open project. Check server logs for details.",
-              }),
-            );
-          } else {
-            setTimeout(() => {
-              reaper.getState().then((newState) => {
-                ws.send(JSON.stringify({ type: "state", data: newState }));
-              });
-            }, 3000);
-          }
-        });
+        reaper.openProject(projectPath);
       }
 
       if (cmd.type === "mute") {

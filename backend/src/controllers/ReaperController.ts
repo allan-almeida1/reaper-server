@@ -144,14 +144,12 @@ class ReaperController implements ReaperControllerInterface {
     return true; // Return true if successful, false otherwise
   }
 
-  async openProject(path: string): Promise<boolean> {
+  async openProject(path: string) {
     try {
       const cmd = `xdg-open "${path}"`;
       await execAsync(cmd);
-      return true;
     } catch (error) {
       console.error("Error opening project:", error);
-      return false;
     }
   }
 

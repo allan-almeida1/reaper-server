@@ -3,12 +3,13 @@ import { WebSocketServer } from "ws";
 import type { Project } from "@reaper/shared";
 import { createWsServer } from "./WebSocket";
 import ReaperController from "./controllers/ReaperController";
-import { Server } from "node-osc";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
+app.use(express.json());
+
 const server = app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
@@ -84,10 +85,17 @@ const wss = new WebSocketServer({ server });
 const reaper = new ReaperController();
 createWsServer(wss, reaper, projects);
 
-const oscServer = new Server(3333, "0.0.0.0", () => {
-  console.log("OSC Server is listening on port 3333");
-});
-
-oscServer.on("message", (msg) => {
-  console.log("Message:", msg);
+app.post("/api/project/open", (req, res) => {
+  res.status(200).json({ message: "Project open event received" });
+  const { event, path } = req.body;
+  if (event === "project_opened") {
+    console.log("Project opened:", path);
+    reaper.getState().then((state) => {
+      wss.clients.forEach((client) => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({ type: "state", data: state }));
+        }
+      });
+    });
+  }
 });
