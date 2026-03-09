@@ -41,7 +41,6 @@ const Playlist = ({ projects }: PlaylistProps) => {
 		}
 		const genreIndex = prefix % genres.length - 1
 		const genre = genres[genreIndex]
-		console.log(`Project: ${name}, Genre: ${genre}`)
 		return genreColorMap[genre as keyof typeof genreColorMap] || "#fff"
 	}
 

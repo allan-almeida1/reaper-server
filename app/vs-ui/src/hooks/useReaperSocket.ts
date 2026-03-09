@@ -6,8 +6,11 @@ export default function useReaperSocket() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
+  const OSC_SERVER_IP = import.meta.env.VITE_OSC_SERVER_IP || "localhost";
+  const OSC_SERVER_PORT = import.meta.env.VITE_OSC_SERVER_PORT || "3000";
+
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.0.9:3000");
+    const socket = new WebSocket(`ws://${OSC_SERVER_IP}:${OSC_SERVER_PORT}`);
 
     socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
@@ -34,5 +37,11 @@ export default function useReaperSocket() {
     }
   };
 
-  return { state, projects, send };
+  const getState = () => {
+    if (ws) {
+      ws.send(JSON.stringify({ type: "getState" }));
+    }
+  };
+
+  return { state, getState, projects, send };
 }

@@ -11,23 +11,23 @@ import Settings from './components/Settings';
 
 function App() {
 
-  const { state, projects, send } = useReaperSocket();
+  const { state, getState, projects, send } = useReaperSocket();
 
   if (!state) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className='bg-base-100 h-screen w-full overflow-hidden p-4 xl:p-20 flex flex-col'>
+    <div className='bg-base-100 h-screen w-full overflow-hidden p-2 xl:p-20 flex flex-col'>
 
-      <div className='flex w-full h-full gap-6 flex-col sm:flex-row'>
+      <div className='flex w-full h-full gap-6 flex-col min-h-0'>
 
-        <div className='bg-base-200 p-6 rounded-2xl w-full flex-6'>
+        <div className='bg-base-200 p-6 rounded-2xl w-full flex-1 flex flex-col min-h-0'>
           <div className="tabs tabs-lg tabs-box h-full border-s-0">
             <label className="tab gap-3">
               <input type="radio" name="my_tabs_4" defaultChecked />
               <RiPlayListLine />
-              Playlist
+              <span className='hidden sm:block'>Playlist</span>
             </label>
             <div className="tab-content bg-base-100 border-base-300 p-6">
               <div className='overflow-hidden flex flex-col h-full'>
@@ -42,24 +42,25 @@ function App() {
             <label className="tab gap-3">
               <input type="radio" name="my_tabs_4" />
               <MdSettingsInputComponent />
-              Tracks
+              <span className='hidden sm:block'>Mixer</span>
             </label>
-            <div className="tab-content bg-base-100 border-base-300 p-6 overflow-y-auto">
-              <ul className='list'>
+            <div className="tab-content bg-base-100 border-base-300 p-6">
+              <div className='flex flex-row gap-x-1 gap-y-4 flex-wrap h-full overflow-y-auto'>
                 {state.tracks.map((track: Track) => (
                   <TrackComponent
                     key={track.id}
                     track={track}
                     send={send}
+                    getState={getState}
                   />
                 ))}
-              </ul>
+              </div>
             </div>
 
             <label className="tab gap-3">
               <input type="radio" name="my_tabs_4" />
               <IoMdSettings />
-              Configurações
+              <span className='hidden sm:block'>Configurações</span>
             </label>
             <div className="tab-content bg-base-100 border-base-300 p-6">
               <Settings />
@@ -67,7 +68,7 @@ function App() {
           </div>
         </div>
 
-        <div className='bg-base-200 p-6 rounded-2xl w-full flex-4'>
+        <div className='bg-base-200 p-6 rounded-2xl w-full'>
           Teste
         </div>
 
