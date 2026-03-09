@@ -140,6 +140,10 @@ class ReaperController implements ReaperControllerInterface {
     return true; // Return true if successful, false otherwise
   }
 
+  async openProject(path: string): Promise<boolean> {
+    return true;
+  }
+
   async getState(): Promise<State> {
     const controller = new AbortController();
     const timeout = setTimeout(() => {
