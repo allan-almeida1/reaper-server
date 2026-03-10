@@ -69,7 +69,7 @@ let projects: Project[] = [
     path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
   {
-    name: "02 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
+    name: "06 - A VIDA É DO TAMANHO DO QUE A GENTE QUER",
     path: "/home/allan/Documents/REAPER Media/sample_project.RPP",
   },
   {

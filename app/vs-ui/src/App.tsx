@@ -9,8 +9,14 @@ import Transport from './components/Transport';
 import { ReaperProvider } from './contexts/ReaperContext';
 import Mixer from './components/Mixer';
 import { MdRefresh } from "react-icons/md";
+import { useState } from 'react';
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const handleSearchChange = (str: string) => {
+    setSearchTerm(str);
+  }
 
   return (
     <ReaperProvider>
@@ -30,10 +36,10 @@ function App() {
               </label>
               <div className="tab-content bg-base-100 border-base-300 p-6">
                 <div className='overflow-hidden flex flex-col h-full'>
-                  <SearchInput />
+                  <SearchInput onChange={handleSearchChange} />
                   <div className='divider'></div>
                   <div className='flex-1 overflow-y-auto min-h-0'>
-                    <Playlist />
+                    <Playlist searchTerm={searchTerm} />
                   </div>
                 </div>
               </div>

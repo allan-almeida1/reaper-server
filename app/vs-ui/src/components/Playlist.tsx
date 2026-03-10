@@ -26,7 +26,11 @@ const genreColorMap = {
 	GALOPE: "#dfd7ff"
 }
 
-const Playlist = () => {
+interface PlaylistProps {
+	searchTerm: string;
+}
+
+const Playlist = ({ searchTerm }: PlaylistProps) => {
 	const [hydrated, setHydrated] = useState(false);
 
 	const { projects, send, setIsOpeningProject } = useReaper();
@@ -42,6 +46,18 @@ const Playlist = () => {
 		return genreColorMap[genre as keyof typeof genreColorMap] || "#fff"
 	}
 
+	const getProjectGenre = (name: string) => {
+		// Get the first two letters of the project name and convert to number
+		const prefix = parseInt(name.slice(0, 2))
+		if (isNaN(prefix)) {
+			return "Unknown"
+		}
+		const genreIndex = prefix % genres.length - 1
+		return genres[genreIndex] || "Unknown"
+	}
+
+	const filteredProjects = projects?.filter(project => project.name.toLowerCase().includes(searchTerm.toLowerCase())) || [];
+
 	useEffect(() => {
 		// this forces a rerender
 		setHydrated(true)
@@ -55,17 +71,24 @@ const Playlist = () => {
 		<div className="w-full">
 			<table className="table table-md">
 				<tbody>
-					{projects?.map((project) => (
+					{filteredProjects.map((project) => (
 						<tr key={project.path}>
-							<td style={
-								{ backgroundColor: getProjectColor(project.name) }
-							}
-								className='text-base-100 cursor-pointer border-y-2'
+							<td className='text-base-content cursor-pointer border-y flex flex-row justify-between'
 								onClick={() => {
 									send({ type: "openProject", payload: project.path })
 									setIsOpeningProject(true);
 								}}
-							>{project.name}</td>
+							>
+								<span>
+									{project.name}
+								</span>
+								<div style={
+									{ backgroundColor: getProjectColor(project.name) }
+								}
+									className="w-30 text-base-100 text-center hidden sm:block font-bold">
+									{getProjectGenre(project.name)}
+								</div>
+							</td>
 						</tr>
 					))}
 				</tbody>

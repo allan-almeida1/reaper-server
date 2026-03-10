@@ -7,7 +7,6 @@ import { useReaper } from "../contexts/ReaperContext";
 
 interface TrackComponentProps {
 	track: Track;
-	key?: React.Key;
 }
 
 const REAPER_MIN_DB = -Infinity;
@@ -56,7 +55,7 @@ const dbToNormalized = (db: number): number => {
 	return Math.min(1, val);
 };
 
-export default function TrackComponent({ track, key }: TrackComponentProps) {
+export default function TrackComponent({ track }: TrackComponentProps) {
 
 	const [level, setLevel] = useState(track.level);
 
@@ -94,7 +93,7 @@ export default function TrackComponent({ track, key }: TrackComponentProps) {
 	}
 
 	return (
-		<div key={key} className="h-96 bg-base-200 flex flex-col w-14">
+		<div className="h-96 bg-base-200 flex flex-col w-14">
 			<div className="gap-2 flex flex-col items-center h-full p-1">
 				<button
 					className={`${track.solo ? 'bg-yellow-500' : 'bg-[#464226] text-yellow-200'} rounded-sm px-4 py-1 text-white cursor-pointer`}
