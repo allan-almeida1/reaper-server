@@ -29,7 +29,7 @@ const genreColorMap = {
 const Playlist = () => {
 	const [hydrated, setHydrated] = useState(false);
 
-	const { projects, send } = useReaper();
+	const { projects, send, setIsOpeningProject } = useReaper();
 
 	const getProjectColor = (name: string) => {
 		// Get the first two letters of the project name and convert to number
@@ -63,6 +63,7 @@ const Playlist = () => {
 								className='text-base-100 cursor-pointer border-y-2'
 								onClick={() => {
 									send({ type: "openProject", payload: project.path })
+									setIsOpeningProject(true);
 								}}
 							>{project.name}</td>
 						</tr>

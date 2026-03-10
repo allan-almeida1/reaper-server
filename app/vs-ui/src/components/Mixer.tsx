@@ -19,7 +19,7 @@ const Mixer = () => {
 	}
 	return (
 		<div className='flex flex-row gap-x-1 gap-y-4 flex-wrap h-full overflow-y-auto'>
-			{state.tracks.map((track: Track) => (
+			{state.tracks?.map((track: Track) => (
 				<TrackComponent
 					key={track.id}
 					track={track}

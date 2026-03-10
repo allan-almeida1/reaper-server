@@ -4,6 +4,7 @@ import type { Project } from "@reaper/shared";
 import { createWsServer } from "./WebSocket";
 import ReaperController from "./controllers/ReaperController";
 import dotenv from "dotenv";
+import { updateCurrentProject } from "./project";
 
 dotenv.config();
 
@@ -91,6 +92,13 @@ app.post("/api/project/open", (req, res) => {
   if (event === "project_opened") {
     console.log("Project opened:", path);
     reaper.getState().then((state) => {
+      const currentProjectName =
+        projects.find((p) => p.path === path)?.name || "Unknown Project";
+      updateCurrentProject(currentProjectName);
+      state.currentProject = {
+        name: currentProjectName,
+        path,
+      };
       wss.clients.forEach((client) => {
         if (client.readyState === 1) {
           client.send(JSON.stringify({ type: "state", data: state }));

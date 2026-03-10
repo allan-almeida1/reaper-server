@@ -6,6 +6,8 @@ interface ReaperContextType {
 	projects: Project[];
 	send: (cmd: Command) => void;
 	getState: () => void;
+	isOpeningProject: boolean;
+	setIsOpeningProject: (isOpening: boolean) => void;
 }
 
 const ReaperContext = createContext<ReaperContextType>({
@@ -13,12 +15,15 @@ const ReaperContext = createContext<ReaperContextType>({
 	projects: [],
 	send: () => { },
 	getState: () => { },
+	isOpeningProject: false,
+	setIsOpeningProject: () => { },
 });
 
 export function ReaperProvider({ children }: { children: ReactNode }) {
 	const [state, setState] = useState<State>({ tracks: [], transport: { state: "stop", position: 0 }, markers: [] });
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [ws, setWs] = useState<WebSocket | null>(null);
+	const [isOpeningProject, setIsOpeningProject] = useState(false);
 
 	const OSC_SERVER_IP = import.meta.env.VITE_OSC_SERVER_IP || "localhost";
 	const OSC_SERVER_PORT = import.meta.env.VITE_OSC_SERVER_PORT || "3000";
@@ -59,7 +64,7 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<ReaperContext.Provider value={{ state, getState, projects, send }}>
+		<ReaperContext.Provider value={{ state, getState, projects, send, isOpeningProject, setIsOpeningProject }}>
 			{children}
 		</ReaperContext.Provider>
 	)

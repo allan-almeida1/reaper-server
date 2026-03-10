@@ -8,6 +8,7 @@ import Settings from './components/Settings';
 import Transport from './components/Transport';
 import { ReaperProvider } from './contexts/ReaperContext';
 import Mixer from './components/Mixer';
+import { MdRefresh } from "react-icons/md";
 
 function App() {
 
@@ -17,7 +18,10 @@ function App() {
 
         <div className='flex w-full h-full gap-6 flex-col min-h-0'>
 
-          <div className='bg-base-200 p-6 rounded-2xl w-full flex-1 flex flex-col min-h-0'>
+          <div className='bg-base-200 p-6 rounded-2xl w-full flex-1 flex flex-col min-h-0 relative'>
+            <button className='btn btn-lg btn-circle btn-neutral absolute right-4 top-4' onClick={() => window.location.reload()}>
+              <MdRefresh size={20} />
+            </button>
             <div className="tabs tabs-lg tabs-box h-full border-s-0">
               <label className="tab gap-3">
                 <input type="radio" name="my_tabs_4" defaultChecked />

@@ -44,12 +44,14 @@ export function createWsServer(
 
       if (cmd.type === "mute") {
         const track = state.tracks.find((t) => t.id === cmd.payload) as Track;
+        if (!track) return;
         track.mute = !track.mute;
         reaper.toggleMuteTrack(track.id);
       }
 
       if (cmd.type === "solo") {
         const track = state.tracks.find((t) => t.id === cmd.payload) as Track;
+        if (!track) return;
         track.solo = !track.solo;
         reaper.toggleSoloTrack(track.id);
       }
@@ -58,6 +60,7 @@ export function createWsServer(
         const track = state.tracks.find(
           (t) => t.id === cmd.payload.id,
         ) as Track;
+        if (!track) return;
         track.level = cmd.payload.level;
         reaper.setTrackLevel(track.id, track.level);
       }

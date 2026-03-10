@@ -5,6 +5,7 @@ import readline from "readline";
 import { Readable } from "stream";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { currentProject } from "../project";
 
 const execAsync = promisify(exec);
 
@@ -171,11 +172,23 @@ class ReaperController implements ReaperControllerInterface {
       }
       const tsv = await res.text();
       const state = await parseReaperState(tsv);
+      state.currentProject = {
+        name: currentProject,
+        path: "",
+      };
       console.log("Fetched state from Reaper:", state);
       return state;
     } catch (error) {
       console.error("Error fetching state from Reaper:", error);
-      return {} as State;
+      const state: State = {
+        tracks: [],
+        markers: [],
+        transport: {
+          state: "stop",
+          position: 0,
+        },
+      };
+      return state;
     }
   }
 }
