@@ -41,7 +41,7 @@ const Playlist = ({ searchTerm }: PlaylistProps) => {
 		if (isNaN(prefix)) {
 			return "#fff"
 		}
-		const genreIndex = prefix % genres.length - 1
+		const genreIndex = prefix % genres.length
 		const genre = genres[genreIndex]
 		return genreColorMap[genre as keyof typeof genreColorMap] || "#fff"
 	}
@@ -52,7 +52,7 @@ const Playlist = ({ searchTerm }: PlaylistProps) => {
 		if (isNaN(prefix)) {
 			return "Unknown"
 		}
-		const genreIndex = prefix % genres.length - 1
+		const genreIndex = prefix % genres.length
 		return genres[genreIndex] || "Unknown"
 	}
 

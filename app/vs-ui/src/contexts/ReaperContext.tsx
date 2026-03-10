@@ -8,6 +8,7 @@ interface ReaperContextType {
 	getState: () => void;
 	isOpeningProject: boolean;
 	setIsOpeningProject: (isOpening: boolean) => void;
+	projectsPath: string;
 }
 
 const ReaperContext = createContext<ReaperContextType>({
@@ -17,6 +18,7 @@ const ReaperContext = createContext<ReaperContextType>({
 	getState: () => { },
 	isOpeningProject: false,
 	setIsOpeningProject: () => { },
+	projectsPath: ""
 });
 
 export function ReaperProvider({ children }: { children: ReactNode }) {
@@ -24,6 +26,7 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [ws, setWs] = useState<WebSocket | null>(null);
 	const [isOpeningProject, setIsOpeningProject] = useState(false);
+	const [projectsPath, setProjectsPath] = useState("");
 
 	const OSC_SERVER_IP = import.meta.env.VITE_OSC_SERVER_IP || "localhost";
 	const OSC_SERVER_PORT = import.meta.env.VITE_OSC_SERVER_PORT || "3000";
@@ -40,7 +43,8 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 			}
 
 			if (msg.type === "projects") {
-				setProjects(msg.data);
+				setProjects(msg.data.projects);
+				setProjectsPath(msg.data.folderPath);
 			}
 		};
 
@@ -64,7 +68,15 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<ReaperContext.Provider value={{ state, getState, projects, send, isOpeningProject, setIsOpeningProject }}>
+		<ReaperContext.Provider value={{
+			state,
+			getState,
+			projects,
+			send,
+			isOpeningProject,
+			setIsOpeningProject,
+			projectsPath
+		}}>
 			{children}
 		</ReaperContext.Provider>
 	)

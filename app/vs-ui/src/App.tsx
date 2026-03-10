@@ -10,6 +10,7 @@ import { ReaperProvider } from './contexts/ReaperContext';
 import Mixer from './components/Mixer';
 import { MdRefresh } from "react-icons/md";
 import { useState } from 'react';
+import SaveButton from './components/SaveButton';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -28,6 +29,10 @@ function App() {
             <button className='btn btn-lg btn-circle btn-neutral absolute right-4 top-4' onClick={() => window.location.reload()}>
               <MdRefresh size={20} />
             </button>
+            <div className='absolute right-20 top-4'>
+              <SaveButton />
+            </div>
+
             <div className="tabs tabs-lg tabs-box h-full border-s-0">
               <label className="tab gap-3">
                 <input type="radio" name="my_tabs_4" defaultChecked />

@@ -139,6 +139,11 @@ class ReaperController implements ReaperControllerInterface {
     sendOscCommand(cmd, markerId);
   }
 
+  saveProject(): void {
+    const cmd = "/action/40026";
+    sendOscCommand(cmd);
+  }
+
   async setAudioDevice(deviceName: string): Promise<boolean> {
     // Implementation to set the audio device
     // X18/XR18

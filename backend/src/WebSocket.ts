@@ -1,16 +1,25 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { ReaperControllerInterface } from "./interfaces/ReaperController.interface";
 import type { State, Track, Project } from "@reaper/shared";
+import { ProjectsControllerInterface } from "./interfaces/ProjecrsController.interface";
 
 export function createWsServer(
   wss: WebSocketServer,
   reaper: ReaperControllerInterface,
-  projects: Project[],
+  projectsController: ProjectsControllerInterface,
 ) {
   wss.on("connection", async (ws: WebSocket) => {
     const state = await reaper.getState();
     ws.send(JSON.stringify({ type: "state", data: state }));
-    ws.send(JSON.stringify({ type: "projects", data: projects }));
+    ws.send(
+      JSON.stringify({
+        type: "projects",
+        data: {
+          projects: projectsController.getProjects(),
+          folderPath: process.env.DEFAULT_REAPER_PROJECTS_DIR || "",
+        },
+      }),
+    );
 
     ws.on("message", (message: string) => {
       const cmd = JSON.parse(message);
@@ -40,6 +49,25 @@ export function createWsServer(
       if (cmd.type === "openProject") {
         const projectPath = cmd.payload;
         reaper.openProject(projectPath);
+      }
+
+      if (cmd.type === "saveProject") {
+        console.log("Saving project...");
+        reaper.saveProject();
+      }
+
+      if (cmd.type === "readProjects") {
+        projectsController.loadProjects();
+        const projects = projectsController.getProjects();
+        ws.send(
+          JSON.stringify({
+            type: "projects",
+            data: {
+              projects,
+              folderPath: process.env.DEFAULT_REAPER_PROJECTS_DIR || "",
+            },
+          }),
+        );
       }
 
       if (cmd.type === "mute") {
