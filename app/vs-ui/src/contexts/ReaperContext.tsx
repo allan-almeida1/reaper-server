@@ -10,6 +10,7 @@ interface ReaperContextType {
 	setIsOpeningProject: (isOpening: boolean) => void;
 	projectsPath: string;
 	currentProjectInfo?: Project | null;
+	getTransport: () => void;
 }
 
 const ReaperContext = createContext<ReaperContextType>({
@@ -21,6 +22,7 @@ const ReaperContext = createContext<ReaperContextType>({
 	setIsOpeningProject: () => { },
 	projectsPath: "",
 	currentProjectInfo: null,
+	getTransport: () => { },
 });
 
 export function ReaperProvider({ children }: { children: ReactNode }) {
@@ -43,6 +45,13 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 			if (msg.type === "state") {
 				console.log("Received state update:", msg.data);
 				setState({ ...msg.data });
+			}
+
+			if (msg.type === "transport") {
+				setState((prevState) => ({
+					...prevState,
+					transport: msg.data,
+				}));
 			}
 
 			if (msg.type === "projects") {
@@ -74,6 +83,13 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 		}
 	};
 
+	const getTransport = () => {
+		if (ws) {
+			ws.send(JSON.stringify({ type: "getTransport" }));
+			console.log("Sent getTransport command");
+		}
+	}
+
 	return (
 		<ReaperContext.Provider value={{
 			state,
@@ -84,6 +100,7 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 			setIsOpeningProject,
 			projectsPath,
 			currentProjectInfo,
+			getTransport
 		}}>
 			{children}
 		</ReaperContext.Provider>

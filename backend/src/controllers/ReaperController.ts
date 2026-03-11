@@ -216,6 +216,34 @@ class ReaperController
       return state;
     }
   }
+
+  async getTransport(): Promise<State["transport"]> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 2000);
+
+    try {
+      const res = await fetch(
+        `http://${process.env.REAPER_WEB_SERVER_IP}:${process.env.REAPER_WEB_SERVER_PORT}/_/TRANSPORT;GET;`,
+        { signal: controller.signal },
+      );
+      clearTimeout(timeout);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const tsv = await res.text();
+      const state = await parseReaperState(tsv);
+      console.log("Fetched transport from Reaper:", state.transport);
+      return state.transport;
+    } catch (error) {
+      console.error("Error fetching transport from Reaper:", error);
+      return {
+        state: "stop",
+        position: 0,
+      };
+    }
+  }
 }
 
 export default ReaperController;

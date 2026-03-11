@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaPlay, FaStop } from "react-icons/fa";
 import { FaPause } from "react-icons/fa6";
 import { VscTriangleDown } from "react-icons/vsc";
@@ -10,9 +10,11 @@ import { useReaper } from '../contexts/ReaperContext';
 const Transport = () => {
 	const [hydrated, setHydrated] = useState(false);
 	const [activeMarker, setActiveMarker] = useState<number>(1);
-	const [clickedMarker, setClickedMarker] = useState<number | null>(null);
+	const [clickedMarker, setClickedMarker] = useState<number>(0);
 	const [isMarkerClicked, setIsMarkerClicked] = useState(false);
 	const [showingMarkers, setShowingMarkers] = useState(false);
+
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const {
 		state,
@@ -20,7 +22,8 @@ const Transport = () => {
 		send,
 		isOpeningProject,
 		setIsOpeningProject,
-		currentProjectInfo
+		currentProjectInfo,
+		getTransport
 	} = useReaper();
 
 	useEffect(() => {
@@ -35,25 +38,46 @@ const Transport = () => {
 	}
 
 	const goToMarker = async (marker: Marker) => {
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
 		setIsMarkerClicked(true);
 		setClickedMarker(marker.id);
+
+		timeoutRef.current = setTimeout(() => {
+			setIsMarkerClicked(false);
+			setClickedMarker(0);
+		}, 8000);
+
 		await send({ type: "goToMarker", payload: marker.id });
 		console.log("Sent goToMarker command for marker ID:", marker.id);
-		delayedGetState();
+		getTransport();
 	}
 
 	useEffect(() => {
-		console.log("Markers:", state.markers);
-		if (isMarkerClicked) {
-			console.log("Marker clicked, checking position...", activeMarker);
-			setIsMarkerClicked(false);
+		if (isMarkerClicked && state.markers.length > 0) {
+			const marker = state.markers.find((m) => m.id === clickedMarker);
+			if (!marker) return;
+
 			const currentPosition = state.transport.position;
-			const marker = state.markers.find((m) => m.id === clickedMarker)
-			if (Math.abs(currentPosition - marker!.position) < 0.5) {
-				setActiveMarker(marker!.id);
+			const diff = Math.abs(currentPosition - marker.position);
+
+			if (diff < 0.5) {
+				setActiveMarker(marker.id);
+				setIsMarkerClicked(false);
+				setClickedMarker(0);
+				if (timeoutRef.current) {
+					clearTimeout(timeoutRef.current);
+					timeoutRef.current = null;
+				}
+			} else {
+				const pollTimer = setTimeout(() => {
+					getTransport();
+				}, 200);
+				return () => clearTimeout(pollTimer);
 			}
 		}
-	}, [state])
+	}, [state.transport.position, isMarkerClicked, clickedMarker])
 
 	useEffect(() => {
 		setIsOpeningProject(false);
@@ -109,7 +133,10 @@ const Transport = () => {
 					{state.markers?.map((marker: Marker) => (
 						<div key={marker.id} className='flex flex-col items-center cursor-pointer gap-2'
 							onClick={() => goToMarker(marker)}>
-							<div className={activeMarker === marker.id ? "text-accent" : "opacity-0"}>
+							<div className={`${activeMarker === marker.id ? "text-accent" : "opacity-0"} ${isMarkerClicked && clickedMarker === marker.id ? "hidden" : "flex"}`}>
+								<VscTriangleDown size={24} />
+							</div>
+							<div className={`${clickedMarker === marker.id && activeMarker !== marker.id ? "flex" : "hidden"} text-base-content opacity-50`}>
 								<VscTriangleDown size={24} />
 							</div>
 							<div className='w-8 aspect-square text-lg flex items-center justify-center active:scale-90 transition-transform  rounded-full bg-secondary'>{marker.id}</div>

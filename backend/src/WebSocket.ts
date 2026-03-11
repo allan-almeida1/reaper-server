@@ -107,6 +107,12 @@ export function createWsServer(
           ws.send(JSON.stringify({ type: "state", data: newState }));
         });
       }
+
+      if (cmd.type === "getTransport") {
+        reaper.getTransport().then((newTransport) => {
+          ws.send(JSON.stringify({ type: "transport", data: newTransport }));
+        });
+      }
     });
   });
 }

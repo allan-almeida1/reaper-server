@@ -10,6 +10,7 @@ export interface ReaperControllerInterface {
   goToMarker(markerId: number): void;
   setAudioDevice(deviceName: string): Promise<boolean>;
   getState(): Promise<State>;
+  getTransport(): Promise<State["transport"]>;
   openProject(path: string): void;
   saveProject(): void;
   getOpenProjectInfo(): Promise<Project>;
