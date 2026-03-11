@@ -20,6 +20,9 @@ export function createWsServer(
         },
       }),
     );
+    reaper.getOpenProjectInfo().then((project) => {
+      ws.send(JSON.stringify({ type: "currentProject", data: project }));
+    });
 
     ws.on("message", (message: string) => {
       const cmd = JSON.parse(message);
@@ -54,6 +57,12 @@ export function createWsServer(
       if (cmd.type === "saveProject") {
         console.log("Saving project...");
         reaper.saveProject();
+      }
+
+      if (cmd.type === "getOpenProjectInfo") {
+        reaper.getOpenProjectInfo().then((project) => {
+          ws.send(JSON.stringify({ type: "currentProject", data: project }));
+        });
       }
 
       if (cmd.type === "readProjects") {

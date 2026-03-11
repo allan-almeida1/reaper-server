@@ -1,4 +1,4 @@
-import type { State } from "@reaper/shared";
+import type { Project, State } from "@reaper/shared";
 
 export interface ReaperControllerInterface {
   toggleMuteTrack(trackId: number): void;
@@ -12,4 +12,5 @@ export interface ReaperControllerInterface {
   getState(): Promise<State>;
   openProject(path: string): void;
   saveProject(): void;
+  getOpenProjectInfo(): Promise<Project>;
 }

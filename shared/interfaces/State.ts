@@ -9,5 +9,4 @@ export interface State {
     state: "play" | "pause" | "stop";
     position: number;
   };
-  currentProject?: Project;
 }

@@ -14,7 +14,14 @@ const Transport = () => {
 	const [isMarkerClicked, setIsMarkerClicked] = useState(false);
 	const [showingMarkers, setShowingMarkers] = useState(false);
 
-	const { state, getState, send, isOpeningProject, setIsOpeningProject } = useReaper();
+	const {
+		state,
+		getState,
+		send,
+		isOpeningProject,
+		setIsOpeningProject,
+		currentProjectInfo
+	} = useReaper();
 
 	useEffect(() => {
 		// this forces a rerender
@@ -50,7 +57,7 @@ const Transport = () => {
 
 	useEffect(() => {
 		setIsOpeningProject(false);
-	}, [state.currentProject?.name])
+	}, [currentProjectInfo?.name])
 
 	if (!hydrated) {
 		// this returns null on first render, so the client and server match
@@ -68,7 +75,7 @@ const Transport = () => {
 			)}
 
 			<div className={`flex flex-col ${showingMarkers ? "hidden" : ""} sm:flex`}>
-				<span className='text-sm opacity-50'>{state.currentProject?.name}</span>
+				<span className='text-sm opacity-50'>{currentProjectInfo?.name}</span>
 				<div className='flex items-center gap-6'>
 					<button className={`cursor-pointer block p-4 active:scale-90 transition-transform  
 					${state?.transport?.state === "play" ? "text-accent" : ""}`}

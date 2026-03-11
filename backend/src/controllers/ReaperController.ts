@@ -1,11 +1,11 @@
 import { ReaperControllerInterface } from "../interfaces/ReaperController.interface";
-import type { State } from "@reaper/shared";
+import type { Project, State } from "@reaper/shared";
 import { Client, Server } from "node-osc";
 import readline from "readline";
 import { Readable } from "stream";
+import { EventEmitter } from "events";
 import { exec } from "child_process";
 import { promisify } from "util";
-import { currentProject } from "../project";
 
 const execAsync = promisify(exec);
 
@@ -103,7 +103,10 @@ async function parseReaperState(tsv: string): Promise<State> {
   return state;
 }
 
-class ReaperController implements ReaperControllerInterface {
+class ReaperController
+  extends EventEmitter
+  implements ReaperControllerInterface
+{
   toggleMuteTrack(trackId: number): void {
     const cmd = `/track/${trackId}/mute/toggle`;
     sendOscCommand(cmd);
@@ -144,6 +147,27 @@ class ReaperController implements ReaperControllerInterface {
     sendOscCommand(cmd);
   }
 
+  getOpenProjectInfo(): Promise<Project> {
+    const cmd = "/action/_RS06988540b28381e7a7be6870c0d52b9f16581605";
+    sendOscCommand(cmd);
+    const TIMEOUT_MS = 10000;
+
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        this.removeListener("projectInfoReceived", onProjectInfo);
+        reject(new Error("Timeout waiting for project info"));
+      }, TIMEOUT_MS);
+
+      const onProjectInfo = (project: Project) => {
+        console.log("Project info received in ReaperController:", project);
+        clearTimeout(timeoutId);
+        resolve(project);
+      };
+
+      this.once("projectInfoReceived", onProjectInfo);
+    });
+  }
+
   async setAudioDevice(deviceName: string): Promise<boolean> {
     // Implementation to set the audio device
     // X18/XR18
@@ -177,10 +201,6 @@ class ReaperController implements ReaperControllerInterface {
       }
       const tsv = await res.text();
       const state = await parseReaperState(tsv);
-      state.currentProject = {
-        name: currentProject,
-        path: "",
-      };
       console.log("Fetched state from Reaper:", state);
       return state;
     } catch (error) {
