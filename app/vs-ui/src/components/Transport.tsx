@@ -15,6 +15,7 @@ const Transport = () => {
 	const [showingMarkers, setShowingMarkers] = useState(false);
 
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const projectIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 	const {
 		state,
@@ -80,8 +81,28 @@ const Transport = () => {
 	}, [state.transport.position, isMarkerClicked, clickedMarker])
 
 	useEffect(() => {
+		console.log("Current project info:", currentProjectInfo);
 		setIsOpeningProject(false);
+		if (projectIntervalRef.current) {
+			clearInterval(projectIntervalRef.current);
+			projectIntervalRef.current = null;
+		}
+		getState();
 	}, [currentProjectInfo?.name])
+
+	useEffect(() => {
+		if (isOpeningProject) {
+			projectIntervalRef.current = setInterval(() => {
+				send({ type: "getOpenProjectInfo" });
+			}, 200);
+
+			return () => {
+				if (projectIntervalRef.current) {
+					clearInterval(projectIntervalRef.current);
+				}
+			}
+		}
+	}, [isOpeningProject])
 
 	if (!hydrated) {
 		// this returns null on first render, so the client and server match

@@ -123,17 +123,17 @@ class ReaperController
   }
 
   play(): void {
-    const playCmd = "/action/1007";
+    const playCmd = "/play";
     sendOscCommand(playCmd);
   }
 
   stop(): void {
-    const stopCmd = "/action/1016";
+    const stopCmd = "/stop";
     sendOscCommand(stopCmd);
   }
 
   pause(): void {
-    const pauseCmd = "/action/1008";
+    const pauseCmd = "/pause";
     sendOscCommand(pauseCmd);
   }
 
@@ -176,7 +176,14 @@ class ReaperController
 
   async openProject(path: string) {
     try {
-      const cmd = `xdg-open "${path}"`;
+      // Find operating system and construct appropriate command
+      const os = process.platform;
+      let cmd = "";
+      if (os === "darwin") {
+        cmd = `open "${path}"`;
+      } else {
+        cmd = `xdg-open "${path}"`;
+      }
       await execAsync(cmd);
     } catch (error) {
       console.error("Error opening project:", error);

@@ -6,7 +6,7 @@ import TrackComponent from './TrackComponent';
 const Mixer = () => {
 	const [hydrated, setHydrated] = useState(false);
 
-	const { state } = useReaper();
+	const { state, currentProjectInfo } = useReaper();
 
 	useEffect(() => {
 		// this forces a rerender
@@ -21,7 +21,7 @@ const Mixer = () => {
 		<div className='flex flex-row gap-x-1 gap-y-4 flex-wrap h-full overflow-y-auto'>
 			{state.tracks?.map((track: Track) => (
 				<TrackComponent
-					key={track.id}
+					key={`${currentProjectInfo?.name ?? 'default'}-${track.id}`}
 					track={track}
 				/>
 			))}
