@@ -20,9 +20,14 @@ export function createWsServer(
         },
       }),
     );
-    reaper.getOpenProjectInfo().then((project) => {
-      ws.send(JSON.stringify({ type: "currentProject", data: project }));
-    });
+    reaper
+      .getOpenProjectInfo()
+      .then((project) => {
+        ws.send(JSON.stringify({ type: "currentProject", data: project }));
+      })
+      .catch((err) => {
+        console.error("Error getting open project after timeout:", err);
+      });
 
     ws.on("message", (message: string) => {
       const cmd = JSON.parse(message);
@@ -60,9 +65,14 @@ export function createWsServer(
       }
 
       if (cmd.type === "getOpenProjectInfo") {
-        reaper.getOpenProjectInfo().then((project) => {
-          ws.send(JSON.stringify({ type: "currentProject", data: project }));
-        });
+        reaper
+          .getOpenProjectInfo()
+          .then((project) => {
+            ws.send(JSON.stringify({ type: "currentProject", data: project }));
+          })
+          .catch((err) => {
+            console.error("Error getting open project:", err);
+          });
       }
 
       if (cmd.type === "readProjects") {
@@ -103,15 +113,25 @@ export function createWsServer(
       }
 
       if (cmd.type === "getState") {
-        reaper.getState().then((newState) => {
-          ws.send(JSON.stringify({ type: "state", data: newState }));
-        });
+        reaper
+          .getState()
+          .then((newState) => {
+            ws.send(JSON.stringify({ type: "state", data: newState }));
+          })
+          .catch((err) => {
+            console.error("Error getting state:", err);
+          });
       }
 
       if (cmd.type === "getTransport") {
-        reaper.getTransport().then((newTransport) => {
-          ws.send(JSON.stringify({ type: "transport", data: newTransport }));
-        });
+        reaper
+          .getTransport()
+          .then((newTransport) => {
+            ws.send(JSON.stringify({ type: "transport", data: newTransport }));
+          })
+          .catch((err) => {
+            console.error("Error getting transport:", err);
+          });
       }
     });
   });

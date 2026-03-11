@@ -6,12 +6,14 @@ import { Readable } from "stream";
 import { EventEmitter } from "events";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { getLocalIpAddr } from "../util/get-ip";
 
 const execAsync = promisify(exec);
+const localIp = getLocalIpAddr();
 
 const sendOscCommand = (command: string, value?: number) => {
   const client = new Client(
-    process.env.REAPER_OSC_SERVER_IP!,
+    localIp,
     parseInt(process.env.REAPER_OSC_SERVER_PORT!),
   );
   if (value !== undefined) {
@@ -198,7 +200,7 @@ class ReaperController
 
     try {
       const res = await fetch(
-        `http://${process.env.REAPER_WEB_SERVER_IP}:${process.env.REAPER_WEB_SERVER_PORT}/
+        `http://${localIp}:${process.env.REAPER_WEB_SERVER_PORT}/
 		_/TRANSPORT;TRACK;GET;MARKER;GET;`,
         { signal: controller.signal },
       );
@@ -232,7 +234,7 @@ class ReaperController
 
     try {
       const res = await fetch(
-        `http://${process.env.REAPER_WEB_SERVER_IP}:${process.env.REAPER_WEB_SERVER_PORT}/_/TRANSPORT;GET;`,
+        `http://${localIp}:${process.env.REAPER_WEB_SERVER_PORT}/_/TRANSPORT;GET;`,
         { signal: controller.signal },
       );
       clearTimeout(timeout);

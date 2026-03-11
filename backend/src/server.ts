@@ -5,6 +5,7 @@ import { createWsServer } from "./WebSocket";
 import ReaperController from "./controllers/ReaperController";
 import dotenv from "dotenv";
 import ProjectsController from "./controllers/ProjectsController";
+import { getLocalIpAddr } from "./util/get-ip";
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 
 const server = app.listen(3000, () => {
   console.log("Server is running on port 3000");
+  const localIp = getLocalIpAddr();
+  console.log(`Local IP address: ${localIp}`);
 });
 
 const projectsController = new ProjectsController();

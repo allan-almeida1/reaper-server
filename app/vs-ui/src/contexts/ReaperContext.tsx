@@ -33,7 +33,7 @@ export function ReaperProvider({ children }: { children: ReactNode }) {
 	const [projectsPath, setProjectsPath] = useState("");
 	const [currentProjectInfo, setCurrentProjectInfo] = useState<Project | null>(null);
 
-	const OSC_SERVER_IP = import.meta.env.VITE_OSC_SERVER_IP || "localhost";
+	const OSC_SERVER_IP = typeof window !== "undefined" ? window.location.hostname : "localhost";
 	const OSC_SERVER_PORT = import.meta.env.VITE_OSC_SERVER_PORT || "3000";
 
 	useEffect(() => {
