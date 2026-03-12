@@ -14,4 +14,7 @@ export interface ReaperControllerInterface {
   openProject(path: string): void;
   saveProject(): void;
   getOpenProjectInfo(): Promise<Project>;
+  configureReaperForX18(): boolean;
+  openReaper(): boolean;
+  closeReaper(): Promise<boolean>;
 }

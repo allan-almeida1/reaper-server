@@ -4,9 +4,12 @@ import { Client, Server } from "node-osc";
 import readline from "readline";
 import { Readable } from "stream";
 import { EventEmitter } from "events";
-import { exec } from "child_process";
+import { exec, spawn } from "child_process";
 import { promisify } from "util";
 import { getLocalIpAddr } from "../util/get-ip";
+import path from "path";
+import os from "os";
+import fs from "fs";
 
 const execAsync = promisify(exec);
 const localIp = getLocalIpAddr();
@@ -178,20 +181,56 @@ class ReaperController
     return true; // Return true if successful, false otherwise
   }
 
-  async openProject(path: string) {
+  openProject(path: string) {
     try {
       // Find operating system and construct appropriate command
-      const os = process.platform;
-      let cmd = "";
-      if (os === "darwin") {
-        cmd = `open "${path}"`;
-      } else {
-        cmd = `xdg-open "${path}"`;
-      }
-      await execAsync(cmd);
+      const isMac = process.platform === "darwin";
+      const executable = isMac ? "open" : "reaper";
+      const args = isMac ? ["-a", "REAPER", path] : [path];
+
+      const reaperProcess = spawn(executable, args, {
+        detached: true,
+        stdio: "ignore",
+      });
+
+      reaperProcess.unref();
     } catch (error) {
       console.error("Error opening project:", error);
     }
+  }
+
+  openReaper(): boolean {
+    try {
+      const isMac = process.platform === "darwin";
+      const executable = isMac ? "open" : "reaper";
+      const args = isMac ? ["-a", "REAPER"] : [];
+
+      const reaperProcess = spawn(executable, args, {
+        detached: true,
+        stdio: "ignore",
+      });
+
+      reaperProcess.unref();
+      return true;
+    } catch (error) {
+      console.error("Error opening REAPER:", error);
+      return false;
+    }
+  }
+
+  async closeReaper(): Promise<boolean> {
+    return new Promise((resolve) => {
+      execAsync("pkill reaper").then(
+        () => {
+          console.log("Reaper closed");
+          resolve(true);
+        },
+        (error) => {
+          console.error("Error closing Reaper:", error);
+          resolve(false);
+        },
+      );
+    });
   }
 
   async getState(): Promise<State> {
@@ -253,6 +292,42 @@ class ReaperController
         state: "stop",
         position: 0,
       };
+    }
+  }
+
+  configureReaperForX18(): boolean {
+    const iniPath = path.join(os.homedir(), ".config", "REAPER", "reaper.ini");
+    const configsToUpdate = {
+      linux_audio_nch_in: "18",
+      linux_audio_nch_out: "18",
+      alsa_indev: "hw:X18XR18",
+      alsa_outdev: "hw:X18XR18",
+    };
+    try {
+      if (!fs.existsSync(iniPath)) {
+        console.error("reaper.ini file not found at expected path:", iniPath);
+        return false;
+      }
+      let content = fs.readFileSync(iniPath, "utf-8");
+      Object.entries(configsToUpdate).forEach(([key, value]) => {
+        const regex = new RegExp(`^${key}=.*$`, "m");
+        if (regex.test(content)) {
+          content = content.replace(regex, `${key}=${value}`);
+        } else {
+          content += `\n${key}=${value}`;
+        }
+      });
+      fs.writeFileSync(iniPath, content, "utf-8");
+      console.log(
+        "reaper.ini updated successfully for X18/XR18 configuration.",
+      );
+      return true;
+    } catch (error) {
+      console.error(
+        "Error updating reaper.ini for X18/XR18 configuration:",
+        error,
+      );
+      return false;
     }
   }
 }

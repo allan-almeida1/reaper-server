@@ -133,6 +133,36 @@ export function createWsServer(
             console.error("Error getting transport:", err);
           });
       }
+
+      if (cmd.type === "configureReaperForX18") {
+        const success = reaper.configureReaperForX18();
+        ws.send(
+          JSON.stringify({
+            type: "configureReaperForX18Result",
+            data: { success },
+          }),
+        );
+      }
+
+      if (cmd.type === "openReaper") {
+        const success = reaper.openReaper();
+        ws.send(
+          JSON.stringify({
+            type: "openReaperResult",
+            data: { success },
+          }),
+        );
+      }
+
+      if (cmd.type === "closeReaper") {
+        const success = reaper.closeReaper();
+        ws.send(
+          JSON.stringify({
+            type: "closeReaperResult",
+            data: { success },
+          }),
+        );
+      }
     });
   });
 }
