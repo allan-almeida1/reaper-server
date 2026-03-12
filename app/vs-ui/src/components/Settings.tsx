@@ -4,6 +4,7 @@ import { TbPlugConnected } from "react-icons/tb";
 import { useReaper } from '../contexts/ReaperContext';
 import { IoCloseSharp } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
+import { FaPowerOff } from "react-icons/fa6";
 
 const Settings = () => {
 	const [hydrated, setHydrated] = useState(false);
@@ -81,12 +82,18 @@ const Settings = () => {
 		};
 	}, [onProjectsLoaded])
 
+	const confirmAndPowerOff = () => {
+		if (window.confirm("Are you sure you want to power off the server?")) {
+			send({ type: "powerOff" })
+		}
+	}
+
 	if (!hydrated) {
 		// this returns null on first render, so the client and server match
 		return null
 	}
 	return (
-		<div className='flex flex-col gap-10'>
+		<div className='flex flex-col gap-10 h-full'>
 			<ToastContainer
 				theme='dark'
 				position='top-center'
@@ -134,6 +141,15 @@ const Settings = () => {
 						className='w-10 h-10'
 					/> CLOSE Reaper <IoCloseSharp className='text-red-500' size={36} />
 				</button>
+			</div>
+
+			<div className='flex h-full flex-col items-center justify-end gap-4'>
+				<button className='btn btn-circle btn-xl btn-error'
+					onClick={confirmAndPowerOff}
+				>
+					<FaPowerOff size={36} />
+				</button>
+				<span className='text-sm text-gray-500'>DESLIGAR SERVIDOR</span>
 			</div>
 		</div>
 	)

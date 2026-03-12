@@ -2,6 +2,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { ReaperControllerInterface } from "./interfaces/ReaperController.interface";
 import type { State, Track, Project } from "@reaper/shared";
 import { ProjectsControllerInterface } from "./interfaces/ProjecrsController.interface";
+import { exec } from "child_process";
 
 export function createWsServer(
   wss: WebSocketServer,
@@ -162,6 +163,16 @@ export function createWsServer(
             data: { success },
           }),
         );
+      }
+
+      if (cmd.type === "powerOff") {
+        exec("sudo shutdown -h now", (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Erro ao tentar desligar: ${error.message}`);
+            return;
+          }
+          console.log("Servidor desligando...");
+        });
       }
     });
   });
