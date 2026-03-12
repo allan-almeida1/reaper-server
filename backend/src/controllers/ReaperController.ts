@@ -150,7 +150,9 @@ class ReaperController
   }
 
   getOpenProjectInfo(): Promise<Project> {
-    const cmd = "/action/_RS06988540b28381e7a7be6870c0d52b9f16581605";
+    const REAPER_PROJECT_INFO_SCRIPT =
+      process.env.REAPER_PROJECT_INFO_SCRIPT ?? "";
+    const cmd = `/action/${REAPER_PROJECT_INFO_SCRIPT}`;
     sendOscCommand(cmd);
     const TIMEOUT_MS = 10000;
 

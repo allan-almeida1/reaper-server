@@ -16,6 +16,7 @@ const Transport = () => {
 
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const projectIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const playCheckIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 	const {
 		state,
@@ -31,6 +32,21 @@ const Transport = () => {
 		// this forces a rerender
 		setHydrated(true)
 	}, [])
+
+	const getStateUntilPlaying = () => {
+		playCheckIntervalRef.current = setInterval(() => {
+			getState();
+		}, 200)
+	}
+
+	useEffect(() => {
+		if (state.transport.state === "play") {
+			if (playCheckIntervalRef.current) {
+				clearInterval(playCheckIntervalRef.current)
+				playCheckIntervalRef.current = null
+			}
+		}
+	}, [state.transport.state])
 
 	const delayedGetState = () => {
 		setTimeout(() => {
@@ -94,7 +110,7 @@ const Transport = () => {
 		if (isOpeningProject) {
 			projectIntervalRef.current = setInterval(() => {
 				send({ type: "getOpenProjectInfo" });
-			}, 200);
+			}, 500);
 
 			return () => {
 				if (projectIntervalRef.current) {
@@ -126,7 +142,7 @@ const Transport = () => {
 					${state?.transport?.state === "play" ? "text-accent" : ""}`}
 						onClick={() => {
 							send({ type: "play" });
-							delayedGetState();
+							getStateUntilPlaying();
 						}}>
 						<FaPlay size={36} />
 					</button>
