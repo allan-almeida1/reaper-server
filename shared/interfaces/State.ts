@@ -1,5 +1,4 @@
 import type { Marker } from "./Marker";
-import { Project } from "./Project";
 import type { Track } from "./Track";
 
 export interface State {
