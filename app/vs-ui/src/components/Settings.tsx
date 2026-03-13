@@ -117,10 +117,10 @@ const Settings = () => {
 					}}>
 					<TbPlugConnected size={36} />
 				</button>
-				<span className=''>Click to set Reaper Audio Device to X18</span>
+				<span className='text-left'>Click to set Reaper Audio Device to X18</span>
 			</div>
 
-			<div className='flex items-center gap-4'>
+			<div className='flex items-center gap-4 flex-wrap justify-center sm:justify-start'>
 
 				<button className="flex btn btn-square btn-xl btn-wide"
 					onClick={() => {
