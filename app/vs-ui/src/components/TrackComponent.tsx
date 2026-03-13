@@ -127,8 +127,8 @@ export default function TrackComponent({ track }: TrackComponentProps) {
 				>M</button>
 			</div>
 
-			<div className="flex bg-[#376FAB] font-light items-center justify-center p-1 text-xs">
-				<b>{track.name === "" ? "--" : track.name}</b>
+			<div className="flex bg-primary h-6 font-light items-center justify-center p-1 text-xs overflow-hidden w-full">
+				<b className="truncate block max-w-full text-center text-primary-content">{track.name === "" ? "--" : track.name}</b>
 			</div>
 		</div>
 	)

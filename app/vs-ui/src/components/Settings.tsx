@@ -149,7 +149,7 @@ const Settings = () => {
 				>
 					<FaPowerOff size={36} />
 				</button>
-				<span className='text-sm text-gray-500'>DESLIGAR SERVIDOR</span>
+				<span className='text-sm text-base-content'>DESLIGAR SERVIDOR</span>
 			</div>
 		</div>
 	)

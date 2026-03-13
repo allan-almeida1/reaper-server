@@ -12,19 +12,20 @@ const genres = [
 	"SAMBA",
 	"PAGODE",
 	"GALOPE"
-]
+];
 
 const genreColorMap = {
-	REGGAE: "#fafafa",
-	AXE: "#e4ffd4",
-	IJEXA: "#c6f4ff",
-	ARROCHA: "#ffeabd",
-	LAMBADA: "#cbcbcb",
-	SERTANEJO: "#ffa895",
-	SAMBA: "#ffe87e",
-	PAGODE: "#ffc8dd",
-	GALOPE: "#dfd7ff"
-}
+	// Cores equalizadas para uso como Background com texto Cloud White (#F8FAFC)
+	REGGAE: "#3A414A",    // Era branco. Agora é um Cinza Chumbo neutro.
+	AXE: "#236B4D",       // Era verde claro. Agora é um Verde Esmeralda profundo.
+	IJEXA: "#216A8C",     // Era ciano. Agora é um Azul Oceano/Ciano escuro.
+	ARROCHA: "#8A5C3D",   // Era pêssego. Agora é um tom de Cobre/Âmbar escurecido.
+	LAMBADA: "#525B69",   // Era cinza claro. Agora é um Cinza Ardósia frio.
+	SERTANEJO: "#8A4147", // Era coral. Agora é um Vermelho Carmim suave.
+	SAMBA: "#8A7429",     // Era amarelo. Agora é um Ouro Velho.
+	PAGODE: "#804164",    // Era rosa. Agora é um Rosa Ameixa (combina com o Secondary).
+	GALOPE: "#53467A"     // Era lilás. Agora é um Índigo/Roxo profundo.
+};
 
 interface PlaylistProps {
 	searchTerm: string;
@@ -69,11 +70,11 @@ const Playlist = ({ searchTerm }: PlaylistProps) => {
 	}
 	return (
 		<div className="w-full">
-			<table className="table table-md">
+			<table className="table table-md table-zebra">
 				<tbody>
 					{filteredProjects.map((project) => (
 						<tr key={project.path}>
-							<td className='text-base-content cursor-pointer border-y flex flex-row justify-between'
+							<td className='text-base-content cursor-pointer border-y border-base-300 flex flex-row justify-between'
 								onClick={() => {
 									send({ type: "openProject", payload: project.path })
 									setIsOpeningProject(true);
@@ -85,7 +86,7 @@ const Playlist = ({ searchTerm }: PlaylistProps) => {
 								<div style={
 									{ backgroundColor: getProjectColor(project.name) }
 								}
-									className="w-30 text-base-100 text-center hidden sm:block font-bold">
+									className="w-30 text-[#F8FAFC] text-center hidden sm:block font-bold">
 									{getProjectGenre(project.name)}
 								</div>
 							</td>

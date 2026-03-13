@@ -21,19 +21,19 @@ function App() {
 
   return (
     <ReaperProvider>
-      <div className='bg-base-100 h-screen w-full overflow-hidden p-2 xl:p-20 flex flex-col'>
+      <div className='bg-base-100 h-screen w-full overflow-hidden p-2 sm:p-4 xl:p-20 flex flex-col'>
 
         <div className='flex w-full h-full gap-6 flex-col min-h-0'>
 
-          <div className='bg-base-200 p-6 rounded-2xl w-full flex-1 flex flex-col min-h-0 relative'>
-            <button className='btn btn-lg btn-circle btn-neutral absolute right-4 top-4' onClick={() => window.location.reload()}>
+          <div className='bg-base-200 p-2 sm:p-6 rounded-2xl w-full flex-1 flex flex-col min-h-0 relative'>
+            <button className='btn btn-sm sm:btn-lg btn-circle btn-success absolute right-4 top-3' onClick={() => window.location.reload()}>
               <MdRefresh size={20} />
             </button>
-            <div className='absolute right-20 top-4'>
+            <div className='absolute right-20 sm:right-22 top-3'>
               <SaveButton />
             </div>
 
-            <div className="tabs tabs-lg tabs-box h-full border-s-0">
+            <div className="tabs tabs-lg tabs-lift h-full border-s-0">
               <label className="tab gap-3">
                 <input type="radio" name="my_tabs_4" defaultChecked />
                 <RiPlayListLine />
@@ -69,7 +69,7 @@ function App() {
             </div>
           </div>
 
-          <div className='bg-base-200 p-6 rounded-2xl w-full'>
+          <div className='bg-base-200 p-2 sm:p-6 rounded-2xl w-full'>
             <Transport />
           </div>
 

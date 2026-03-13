@@ -17,7 +17,7 @@ const SaveButton = () => {
 		return null
 	}
 	return (
-		<button className='btn btn-lg btn-circle btn-primary' onClick={() => {
+		<button className='btn btn-sm sm:btn-lg btn-circle btn-primary' onClick={() => {
 			send({ type: "saveProject" })
 		}}>
 			<FaSave size={20} />

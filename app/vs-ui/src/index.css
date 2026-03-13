@@ -1,15 +1,66 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: all;
+}
 
-/* @theme inline {
-  --color-primary: #00ff00;
-  --color-secondary: #22c55e;
-  --color-accent: #FF6467;
-  --color-neutral: #1f2937;
-  --color-base-100: #0A0A0A;
-  --color-base-200: #18181b;
-  --color-base-300: #27272a;
-} */
+@plugin "daisyui/theme" {
+  name: "reaper";
+  default: true; /* set as default */
+  prefersdark: true; /* set as default dark mode (prefers-color-scheme:dark) */
+  color-scheme: dark; /* color of browser-provided UI */
+
+  /* Bases - Profundidade e Camadas */
+  --color-base-100: #0B0E14;         /* Fundo Principal (Obsidian) */
+  --color-base-200: #161B22;         /* Cards e Abas (Slate) */
+  --color-base-300: #21262D;         /* Hover e Bordas sutis */
+  --color-base-content: #F8FAFC;     /* Texto principal (Cloud White) */
+
+  /* Cores de Marca (Primary & Accent) */
+  /* Um Indigo equilibrado: L=60% para boa leitura sobre o escuro */
+  --color-primary: oklch(60% 0.18 255); 
+  --color-primary-content: oklch(98% 0.01 255);
+
+  /* Um tom de ardósia azulado para elementos menos importantes */
+  --color-secondary: #c41a89; 
+  --color-secondary-content: #181818;
+
+  /* O destaque que você gostou (Electric Indigo) */
+  --color-accent: #6366F1;
+  --color-accent-content: #FFFFFF;
+
+  /* Neutros e Utilitários */
+  --color-neutral: oklch(45% 0.04 240);
+  --color-neutral-content: oklch(98% 0.01 240);
+
+  /* Status - Cores mais "suaves" para não brigar com a interface */
+  --color-info: oklch(72% 0.13 220);    /* Azul suave */
+  --color-info-content: #000000;
+
+  --color-success: oklch(68% 0.16 160); /* O Emerald Mint que sugeri */
+  --color-success-content: oklch(20% 0.05 160);
+
+  --color-warning: oklch(82% 0.15 85);  /* Âmbar/Dourado técnico */
+  --color-warning-content: oklch(25% 0.05 85);
+
+  --color-error: oklch(62% 0.22 25);    /* Vermelho vibrante mas elegante */
+  --color-error-content: oklch(98% 0.01 25);
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
 
 :root {
   margin: 0;

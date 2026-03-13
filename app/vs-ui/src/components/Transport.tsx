@@ -139,7 +139,7 @@ const Transport = () => {
 				<span className='text-sm opacity-50'>{currentProjectInfo?.name}</span>
 				<div className='flex items-center gap-6'>
 					<button className={`cursor-pointer block p-4 active:scale-90 transition-transform  
-					${state?.transport?.state === "play" ? "text-accent" : ""}`}
+					${state?.transport?.state === "play" ? "text-success" : ""}`}
 						onClick={() => {
 							send({ type: "play" });
 							getStateUntilPlaying();
@@ -147,7 +147,7 @@ const Transport = () => {
 						<FaPlay size={36} />
 					</button>
 					<button className={`cursor-pointer block p-4 active:scale-90 transition-transform  
-					${state?.transport?.state === "pause" ? "text-accent" : ""}`}
+					${state?.transport?.state === "pause" ? "text-success" : ""}`}
 						onClick={() => {
 							send({ type: "pause" });
 							delayedGetState();
@@ -166,7 +166,7 @@ const Transport = () => {
 			</div>
 
 			{!isOpeningProject && (
-				<div className={`w-full justify-evenly ${!showingMarkers ? "hidden" : "flex"} sm:flex`}>
+				<div className={`w-full justify-evenly ${!showingMarkers ? "hidden" : "flex"} sm:flex overflow-x-auto gap-2`}>
 					{state.markers?.map((marker: Marker) => (
 						<div key={marker.id} className='flex flex-col items-center cursor-pointer gap-2'
 							onClick={() => goToMarker(marker)}>
@@ -176,8 +176,8 @@ const Transport = () => {
 							<div className={`${clickedMarker === marker.id && activeMarker !== marker.id ? "flex" : "hidden"} text-base-content opacity-50`}>
 								<VscTriangleDown size={24} />
 							</div>
-							<div className='w-8 aspect-square text-lg flex items-center justify-center active:scale-90 transition-transform  rounded-full bg-secondary'>{marker.id}</div>
-							<span className='text-[0.6rem]'>{marker.name}</span>
+							<div className='w-8 aspect-square text-lg flex items-center justify-center active:scale-90 transition-transform  rounded-full bg-accent'>{marker.id}</div>
+							<span className='text-[0.6rem] text-accent-content'>{marker.name}</span>
 						</div>
 					))}
 				</div>
